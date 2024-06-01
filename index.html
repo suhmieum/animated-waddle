@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Conversation</title>
+    <style>
+        @font-face {
+            font-family: 'Pretendard';
+            font-weight: 400;
+            font-style: normal;
+            src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2'),
+                 url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/woff/Pretendard-Regular.woff') format('woff');
+        }
+
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(30, 30, 30, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .section {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .section:nth-child(even) .profile-pic {
+            visibility: hidden;
+        }
+
+        .section:nth-child(even) .conversation {
+            margin-left: auto;
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            position: relative;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:nth-child(odd) .conversation {
+            background-color: #2e2e2e;
+        }
+
+        .section:nth-child(even) .conversation:hover {
+            background-color: #505050; /* 차분한 색상 */
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-pic {
+            flex: 0 0 80px;
+            margin-right: 20px;
+            text-align: center;
+        }
+
+        .profile-pic div {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .conversation {
+            flex: 1;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            font-size: 22px;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+        }
+
+        .conversation p {
+            margin: 0;
+            line-height: 1.8;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .section:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .section:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        .section:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        .section:nth-child(4) {
+            animation-delay: 3s;
+        }
+
+        .section:nth-child(5) {
+            animation-delay: 4s;
+        }
+
+        .section:nth-child(6) {
+            animation-delay: 5s;
+        }
+
+        .section:nth-child(7) {
+            animation-delay: 6s;
+        }
+
+        .section:nth-child(8) {
+            animation-delay: 7s;
+        }
+
+        iframe {
+            width: 100%;
+            height: 315px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #444;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #555;
+        }
+
+        /* 카드 뒤집기 효과 추가 */
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 200px;
+            perspective: 1000px;
+            margin-top: 20px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .flip-card-front {
+            background-color: #333;
+            color: white;
+        }
+
+        .flip-card-back {
+            background-color: #777;
+            color: white;
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 대화 세트 1 -->
+        <div class="section">
+            <div class="profile-pic">
+                <div>VISANG</div>
+            </div>
+            <div class="conversation">
+                <p>안녕하세요! 요즘 어떤 음악을 듣고 계신가요?</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="profile-pic"></div>
+            <div class="conversation">
+                <p>안녕하세요! 최근에 발견한 멋진 음악이 있어요. "Let's Groove"라는 곡인데, 정말 흥미진진합니다.</p>
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            앞면
+                        </div>
+                        <div class="flip-card-back">
+                            뒷면
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 대화 세트 2 -->
+        <div class="section">
+            <div class="profile-pic">
+                <div>VISANG</div>
+            </div>
+            <div class="conversation">
+                <p>그 곡에 대해 좀 더 자세히 말씀해주실 수 있나요?</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="profile-pic"></div>
+            <div class="conversation">
+                <p>물론이죠! 이 곡은 Earth, Wind & Fire의 "Let's Groove"입니다. 80년대 디스코와 펑크의 대표곡 중 하나로, 신나는 리듬과 중독성 있는 멜로디가 특징이에요.</p>
+            </div>
+        </div>
+        
+        <!-- 대화 세트 3 -->
+        <div class="section">
+            <div class="profile-pic">
+                <div>VISANG</div>
+            </div>
+            <div class="conversation">
+                <p>정말 흥미롭네요. 이 곡을 특별히 좋아하게 된 이유가 있나요?</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="profile-pic"></div>
+            <div class="conversation">
+                <p>네, 이 곡은 언제 들어도 기분이 좋아지고 에너지가 넘쳐요. 특히나 복고풍의 사운드와 현대적인 감각이 잘 어우러져 있어서 계속 듣게 되더라구요.</p>
+            </div>
+        </div>
+        
+        <!-- 대화 세트 4 -->
+        <div class="section">
+            <div class="profile-pic">
+                <div>VISANG</div>
+            </div>
+            <div class="conversation">
+                <p>그렇군요! 이 곡을 들을 수 있는 링크가 있을까요?</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="profile-pic"></div>
+            <div class="conversation">
+                <p>물론입니다! 아래에서 바로 들으실 수 있어요.</p>
+                <iframe src="https://www.youtube.com/embed/lzMkFIw8ETM" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+        
+        <!-- 대화 세트 5 -->
+        <div class="section">
+            <div class="profile-pic">
+                <div>VISANG</div>
+            </div>
+            <div class="conversation">
+                <p>이 곡을 소개해주셔서 감사합니다. 음악에 대해 더 이야기 나눌 기회가 있으면 좋겠네요.</p>
+                <a class="button" href="https://www.youtube.com/embed/lzMkFIw8ETM" target="_blank">지금 바로 듣기</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
